@@ -160,9 +160,42 @@ export async function getStaticProps(context) {
     params: { slug },
   } = context;
 
+  const graphcms = new GraphQLClient(process.env.GRAPHCMS_ENDPOINT, {
+    headers: {
+      authorization: `Bearer ${process.env.GRAPHCMS_TOKEN}`,
+    },
+  });
+
+  const variables = {
+    consoleSlug: slug,
+  };
+
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(["gameConsole", slug], () =>
-    getConsole(slug)
+    graphcms.request(
+      `
+      query getGameConsole($consoleSlug: String!) {
+        gameConsole(where: { slug: $consoleSlug }) {
+            id,
+            slug,
+            name,
+            games(orderBy: title_ASC) { 
+                id,
+                title,
+                description,
+                rating,
+                release,
+                upc,
+                developer,
+                publisher,
+                genre,
+                slug
+            }
+        }
+      }
+      `,
+      variables
+    )
   );
 
   return {
