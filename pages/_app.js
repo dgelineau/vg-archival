@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { Provider } from "next-auth/client";
+import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
 import "../styles/globals.css";
@@ -19,6 +20,9 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <Provider session={pageProps.session}>
+      <Head>
+        <title>vg-archive</title>
+      </Head>
       <QueryClientProvider client={queryClientRef.current}>
         <Hydrate state={pageProps.dehydratedState}>
           <Layout>

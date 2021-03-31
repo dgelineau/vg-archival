@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import {
   PageHeader,
   Row,
@@ -26,6 +26,7 @@ import { GraphQLClient } from "graphql-request";
 import { genreFix } from "helpers";
 import { esrbMap } from "constants/index";
 import Link from "next/link";
+import Head from "next/head";
 import moment from "moment";
 
 function Game({ game }) {
@@ -102,6 +103,11 @@ function Game({ game }) {
         ]
       }
     >
+      <Head>
+        <title>
+          vg-archive | {title} - {name}
+        </title>
+      </Head>
       <Row gutter={[16, 16]}>
         <Col md={24} lg={24} xl={12}>
           <Divider>Images</Divider>

@@ -1,4 +1,3 @@
-import React from "react";
 import { HomeOutlined } from "@ant-design/icons";
 import { Layout } from "antd";
 import MenuBuilder from "components/MenuBuilder";
@@ -7,7 +6,7 @@ const { Header, Content } = Layout;
 
 const menuStructure = [
   {
-    key: "dashboard",
+    key: "/",
     text: "Dashboard",
     icon: <HomeOutlined />,
     href: "/",
@@ -25,7 +24,7 @@ const menuStructure = [
         title: "Nintendo",
         subItems: [
           {
-            key: "virtual-boy",
+            key: "/consoles/virtual-boy",
             text: "Virtual Boy",
             href: "/consoles/virtual-boy",
           },
@@ -36,7 +35,7 @@ const menuStructure = [
         title: "Sony",
         subItems: [
           {
-            key: "playstation-2",
+            key: "/consoles/playstation-2",
             text: "PlayStation 2",
             href: "/consoles/playstation-2",
           },
@@ -49,7 +48,6 @@ const menuStructure = [
 
 const menuConfig = {
   theme: "dark",
-  defaultSelectedKeys: "dashboard",
   mode: "horizontal",
 };
 

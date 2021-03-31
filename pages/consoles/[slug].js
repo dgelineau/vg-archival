@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { PageHeader, Row, Col, Button, Upload, notification } from "antd";
 import { UploadOutlined, PlusOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import GamesTable from "components/GamesTable";
-import GameDrawer from "components/GameDrawer";
 import Loading from "components/Loading";
 import Layout from "components/Layout";
 import { GraphQLClient } from "graphql-request";
@@ -18,6 +17,10 @@ import {
 } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import axios from "axios";
+import Head from "next/head";
+import dynamic from "next/dynamic";
+
+const GameDrawer = dynamic(() => import("components/GameDrawer"));
 
 const getConsole = async (slug) => {
   const {
@@ -139,6 +142,9 @@ function Console({ slug }) {
         ]
       }
     >
+      <Head>
+        <title>vg-archive | {data.name}</title>
+      </Head>
       <GameDrawer
         csvData={csvData}
         toggleVisibility={toggleDrawer}

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { useLazyEffect } from "hooks/useLazyEffect";
 import {
   Drawer,

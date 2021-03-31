@@ -1,18 +1,19 @@
-import Link from "next/link";
-import React from "react";
-import PropTypes from "prop-types";
 import { Menu } from "antd";
 import { LoginOutlined, LogoutOutlined } from "@ant-design/icons";
+import PropTypes from "prop-types";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/client";
 import styles from "./MenuBuilder.module.css";
 
 const { SubMenu } = Menu;
 
 const MenuBuilder = ({ items, config }) => {
-  const [session, loading] = useSession();
+  const [session] = useSession();
+  const { asPath } = useRouter();
 
   return (
-    <Menu {...config}>
+    <Menu {...config} selectedKeys={asPath}>
       {items.map(({ key, text, icon, href, groups, requireSession }) => {
         if (requireSession && !session) {
           return null;
