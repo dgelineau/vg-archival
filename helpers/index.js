@@ -1,7 +1,10 @@
 import React from "react";
 import Search from "components/TableFilters/Search";
 import DateRange from "components/TableFilters/DateRange";
-import moment from "moment";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+
+dayjs.extend(isBetween);
 
 export const toLowerCaseString = (str) => str.toString().toLowerCase();
 
@@ -22,7 +25,7 @@ export const numericIsBetweenInclusive = (a, b) => {
 export const dateInBetween = (a, b) => {
   const { start, end } = b;
 
-  return moment(a).isBetween(start, end);
+  return dayjs(a).isBetween(start, end);
 };
 
 export const Filters = {

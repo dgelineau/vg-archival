@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { Table, Tag, Button } from "antd";
 import { EyeOutlined } from "@ant-design/icons";
-import moment from "moment";
+import dayjs from "dayjs";
 import {
   compareAlphabetically,
   caseInsensitiveIncludes,
@@ -155,7 +155,7 @@ function GamesTable({ data }) {
         sortOrder: sortedInfo.columnKey === "release" && sortedInfo.order,
         ellipsis: true,
         ...getFilter(Filters.DateRange, "release", filteredInfo, dateInBetween),
-        render: (text) => moment(text).format("LL"),
+        render: (text) => dayjs(text).format("LL"),
       },
       {
         title: "Actions",

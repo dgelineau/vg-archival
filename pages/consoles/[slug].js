@@ -4,23 +4,17 @@ import { UploadOutlined, PlusOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import GamesTable from "components/GamesTable";
-import Loading from "components/Loading";
 import Layout from "components/Layout";
-import { GraphQLClient } from "graphql-request";
 import parse from "csv-parse/lib/sync";
-import moment from "moment";
-import {
-  QueryClient,
-  useQuery,
-  useQueryClient,
-  useMutation,
-} from "react-query";
+import { useQuery, useQueryClient, useMutation } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import axios from "axios";
 import Head from "next/head";
 import dynamic from "next/dynamic";
+import dayjs from "dayjs";
 
 const GameDrawer = dynamic(() => import("components/GameDrawer"));
+const Loading = dynamic(() => import("components/Loading"));
 
 const getConsole = async (slug) => {
   const {
@@ -100,11 +94,11 @@ function Console({ slug }) {
 
           const games = records.map((game) => {
             const { release } = game;
-            const momentDate = moment(release);
+            const date = dayjs(release);
 
             return {
               ...game,
-              release: momentDate.isValid() ? momentDate : null,
+              release: date.isValid() ? date : null,
             };
           });
 
@@ -144,6 +138,10 @@ function Console({ slug }) {
     >
       <Head>
         <title>vg-archive | {data.name}</title>
+        <meta
+          name="description"
+          content={`List of games that are available on the ${slug} video game console.`}
+        />
       </Head>
       <GameDrawer
         csvData={csvData}
@@ -165,6 +163,9 @@ export async function getStaticProps(context) {
   const {
     params: { slug },
   } = context;
+
+  const { GraphQLClient } = await import("graphql-request");
+  const { QueryClient } = await import("react-query");
 
   const graphcms = new GraphQLClient(process.env.GRAPHCMS_ENDPOINT, {
     headers: {
@@ -210,6 +211,8 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
+  const { GraphQLClient } = await import("graphql-request");
+
   const graphcms = new GraphQLClient(process.env.GRAPHCMS_ENDPOINT, {
     headers: {
       authorization: `Bearer ${process.env.GRAPHCMS_TOKEN}`,

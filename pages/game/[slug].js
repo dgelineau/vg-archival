@@ -22,12 +22,11 @@ import { useSession } from "next-auth/client";
 import Layout from "components/Layout";
 import Loading from "components/Loading";
 import { useRouter } from "next/router";
-import { GraphQLClient } from "graphql-request";
 import { genreFix } from "helpers";
 import { esrbMap } from "constants/index";
 import Link from "next/link";
 import Head from "next/head";
-import moment from "moment";
+import dayjs from "dayjs";
 
 function Game({ game }) {
   const [session, loading] = useSession();
@@ -47,7 +46,7 @@ function Game({ game }) {
     return game.images.map(({ id, url }) => (
       <div key={id}>
         <div className="carousel-content-container">
-          <Image src={url} width={250} />
+          <Image src={url} width={250} alt="game-image" />
         </div>
       </div>
     ));
@@ -107,6 +106,10 @@ function Game({ game }) {
         <title>
           vg-archive | {title} - {name}
         </title>
+        <meta
+          name="description"
+          content={`Information about the video game ${title} that was released for the ${name} console.`}
+        />
       </Head>
       <Row gutter={[16, 16]}>
         <Col md={24} lg={24} xl={12}>
@@ -134,7 +137,7 @@ function Game({ game }) {
             </Descriptions.Item>
             <Descriptions.Item label="UPC">{upc}</Descriptions.Item>
             <Descriptions.Item label="Release Date">
-              {moment(release).format("LL")}
+              {dayjs(release).format("LL")}
             </Descriptions.Item>
           </Descriptions>
         </Col>
@@ -151,6 +154,8 @@ export async function getStaticProps(context) {
   const {
     params: { slug },
   } = context;
+
+  const { GraphQLClient } = await import("graphql-request");
 
   const graphcms = new GraphQLClient(process.env.GRAPHCMS_ENDPOINT, {
     headers: {
@@ -196,6 +201,8 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
+  const { GraphQLClient } = await import("graphql-request");
+
   const graphcms = new GraphQLClient(process.env.GRAPHCMS_ENDPOINT, {
     headers: {
       authorization: `Bearer ${process.env.GRAPHCMS_TOKEN}`,
